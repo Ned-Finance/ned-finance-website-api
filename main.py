@@ -28,7 +28,7 @@ contacts_api_instance = sib_api_v3_sdk.ContactsApi(sib_api_v3_sdk.ApiClient(sib_
 
 @app.post("/", response_class=PlainTextResponse)
 async def root():
-    return {"api": "Ned Finance"}
+    return "Ned Finance"
 
 @app.post("/signup-pre-launch")
 async def signup(data:SignupPreLaunchRequestDto, settings: Annotated[config.Settings, Depends(get_settings)]):
