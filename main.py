@@ -1,7 +1,8 @@
 from functools import lru_cache
 
 from fastapi import Depends, FastAPI
-from fastapi.responses import PlainTextResponse
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import PlainTextResponse, JSONResponse
 from typing_extensions import Annotated
 
 import config
@@ -13,6 +14,19 @@ from sib_api_v3_sdk.rest import  ApiException
 from dto.signup import *
 
 app = FastAPI()
+
+origins = [
+    "https://ned.finance",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @lru_cache()
 def get_settings():
@@ -53,7 +67,10 @@ async def signup(data:SignupPreLaunchRequestDto, settings: Annotated[config.Sett
                 message= "Already subscribed"
             )
         else:
-            return SignupPreLaunchResponseDto(
-                success= False,
-                message= "There was an error please try again"
+            return JSONResponse(
+                status_code=status.HTTP_400_BAD_REQUEST, 
+                content=SignupPreLaunchResponseDto(
+                    success= False,
+                    message= "There was an error please try again"
+                )
             )
