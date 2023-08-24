@@ -26,7 +26,7 @@ contacts_api_instance = sib_api_v3_sdk.ContactsApi(sib_api_v3_sdk.ApiClient(sib_
 
 
 
-@app.post("/", response_class=PlainTextResponse)
+@app.get("/", response_class=PlainTextResponse)
 async def root():
     return "Ned Finance"
 
